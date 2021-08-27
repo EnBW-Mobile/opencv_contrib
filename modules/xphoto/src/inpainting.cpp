@@ -46,6 +46,7 @@
 //
 //M*/
 
+#include <exception>
 #include <vector>
 #include <stack>
 #include <limits>
@@ -407,22 +408,33 @@ namespace xphoto
         }
     }
 
-void inpaint(const Mat &src, const Mat &mask, Mat &dst, const int algorithmType)
+bool inpaint(const Mat &src, const Mat &mask, Mat &dst, const int algorithmType)
 {
-    CV_Assert(!src.empty());
-    CV_Assert(!mask.empty());
-    CV_CheckTypeEQ(mask.type(), CV_8UC1, "");
-    CV_Assert(src.rows == mask.rows && src.cols == mask.cols);
-
-    switch (algorithmType)
+    try
     {
-        case xphoto::INPAINT_SHIFTMAP:
-            return inpaint_shiftmap(src, mask, dst, algorithmType);
-        case xphoto::INPAINT_FSR_BEST:
-        case xphoto::INPAINT_FSR_FAST:
-            return inpaint_fsr(src, mask, dst, algorithmType);
+        CV_Assert(!src.empty());
+        CV_Assert(!mask.empty());
+        CV_CheckTypeEQ(mask.type(), CV_8UC1, "");
+        CV_Assert(src.rows == mask.rows && src.cols == mask.cols);
+
+        switch (algorithmType)
+        {
+            case xphoto::INPAINT_SHIFTMAP:
+                inpaint_shiftmap(src, mask, dst, algorithmType);
+                return true;
+            case xphoto::INPAINT_FSR_BEST:
+            case xphoto::INPAINT_FSR_FAST:
+                inpaint_fsr(src, mask, dst, algorithmType);
+                return true;
+        }
+        CV_Error_(Error::StsNotImplemented, ("Unsupported inpainting algorithm type (=%d)", algorithmType));
     }
-    CV_Error_(Error::StsNotImplemented, ("Unsupported inpainting algorithm type (=%d)", algorithmType));
+    catch(std::exception& e)
+    {
+        std::cerr << "exception caught: " << e.what() << '\n';
+    }
+
+    return false;
 }
 
 }}  // namespace

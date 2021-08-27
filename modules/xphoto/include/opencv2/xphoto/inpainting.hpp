@@ -110,7 +110,7 @@ namespace xphoto
     @param dst destination image
     @param algorithmType see xphoto::InpaintTypes
     */
-    CV_EXPORTS_W void inpaint(const Mat &src, const Mat &mask, Mat &dst, const int algorithmType);
+    CV_EXPORTS_W bool inpaint(const Mat &src, const Mat &mask, Mat &dst, const int algorithmType);
 
 //! @}
 

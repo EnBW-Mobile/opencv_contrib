@@ -49,6 +49,7 @@
 #include <fstream>
 #include <time.h>
 #include <functional>
+#include <stdexcept>
 
 #include "norm2.hpp"
 #include "whs.hpp"
@@ -76,6 +77,13 @@ private:
     public:
         bool operator () (const int &x, const int &y) const
         {
+            int idxSize = main->idx.size();
+
+            if(x >= idxSize || y >= idxSize)
+            {
+                throw std::invalid_argument("Index larger than array size");
+            }
+
             cv::Vec <Tp, cn> u = main->data[main->idx[x]];
             cv::Vec <Tp, cn> v = main->data[main->idx[y]];
 
