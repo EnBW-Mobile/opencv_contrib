@@ -79,9 +79,9 @@ private:
         {
             int idxSize = main->idx.size();
 
-            if(x >= idxSize || y >= idxSize)
+            if(x < 0 || x >= idxSize || y < 0 || y >= idxSize)
             {
-                throw std::invalid_argument("Index larger than array size");
+                throw std::invalid_argument("Index out of bounds");
             }
 
             cv::Vec <Tp, cn> u = main->data[main->idx[x]];
