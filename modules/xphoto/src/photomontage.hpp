@@ -173,7 +173,7 @@ singleExpansion(const int alpha)
     /** Neighbor links **/
     for (size_t i = 0; i < pointSeq.size(); ++i)
         for (size_t j = 0; j < linkIdx[i].size(); ++j)
-            if ( linkIdx[i][j] != -1)
+            if ( linkIdx[i][j] != -1 && linkIdx[i][j] < pointSeq.size() )
                 setWeights( graph, int(i), linkIdx[i][j],
                     labelSeq[i], labelSeq[linkIdx[i][j]], alpha );
 
